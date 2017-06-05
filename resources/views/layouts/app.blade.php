@@ -28,9 +28,10 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
+                    <a class="navbar-brand" href="{{ url('/home') }}">
                         {{ config('app.name', 'Laravel') }}
                     </a>
+                    <a href="chat" class="navbar-brand">Chat</a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">

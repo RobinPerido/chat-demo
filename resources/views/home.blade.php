@@ -10,6 +10,8 @@
                 <div class="panel-body">
                     You are logged in!
                 </div>
+                <notification-composer v-on:notificationsent="addNotification"></notification-composer>
+                <notification-log :notifications="notifications"></notification-log>
             </div>
         </div>
     </div>

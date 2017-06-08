@@ -19,12 +19,16 @@ Vue.component('example', require('./components/Example.vue'));
 Vue.component('chat-message', require('./components/ChatMessage.vue'));
 Vue.component('chat-log', require('./components/ChatLog.vue'));
 Vue.component('chat-composer', require('./components/ChatComposer.vue'));
+Vue.component('notification-log', require('./components/NotificationLog.vue'));
+Vue.component('notification', require('./components/Notification.vue'));
+Vue.component('notification-composer', require('./components/NotificationComposer.vue'));
 
 const app = new Vue({
     el: '#app',
     data: {
         messages: [],
-        usersInRoom: []
+        usersInRoom: [],
+        notifications: []
     },
     methods: {
         addMessage(message) {
@@ -35,6 +39,10 @@ const app = new Vue({
             axios.post('/messages', message).then(response => {
                 // Do whatever;
             })
+        },
+        addNotification(notification) {
+            // Add to notification view
+            this.notifications.push(notification);
         }
     },
     created() {

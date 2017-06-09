@@ -1,6 +1,7 @@
 <?php
 
 use App\Events\MessagePosted;
+use App\Events\Notify;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,24 @@ Route::post('/messages', function() {
 
     // Announce that a new mesage has been posted
     broadcast(new MessagePosted($message, $user))->toOthers();
+
+    return ['status' => 'OK'];
+})->middleware('auth');
+
+Route::get('/notifications', function() {
+    return App\Notification::with('user')->get();
+})->middleware('auth');
+
+Route::post('/notifications', function() {
+    // Store the new message
+    $user = Auth::user();
+
+    $message = $user->notifications()->create([
+        'message' => request()->get('message')
+    ]);
+
+    // Announce that a new mesage has been posted
+    //event(new Notify($message, $user));
 
     return ['status' => 'OK'];
 })->middleware('auth');

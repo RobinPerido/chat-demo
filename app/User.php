@@ -30,4 +30,8 @@ class User extends Authenticatable
     public function messages() {
         return $this->hasMany(Message::class);
     }
+
+    public function notifications() {
+        return $this->hasMany(Notification::class);
+    }
 }

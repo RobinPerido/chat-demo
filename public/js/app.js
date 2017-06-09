@@ -1144,28 +1144,39 @@ var app = new Vue({
                 // Do whatever;
             });
         },
-        addNotification: function addNotification(notification) {
+        addNotification: function addNotification() {
+            var _this = this;
+
             // Add to notification view
-            this.notifications.push(notification);
+            // this.notifications.push(notification);
+            axios.get('/notificationsNow').then(function (response) {
+                for (var i = 0; i < response.data.length; i++) {
+                    // Show notification
+                    _this.notifications.push(response.data[i]);
+                    // Mark as read
+                    axios.post('/notificationRead', response.data[i]); // Probably want this as an API request for better performance
+                }
+                // this.notifications.push(response.data);
+            });
         }
     },
     created: function created() {
-        var _this = this;
+        var _this2 = this;
 
         axios.get('/messages').then(function (response) {
-            _this.messages = response.data;
+            _this2.messages = response.data;
         });
 
         Echo.join('chatroom').here(function (users) {
-            _this.usersInRoom = users;
+            _this2.usersInRoom = users;
         }).joining(function (user) {
-            _this.usersInRoom.push(user);
+            _this2.usersInRoom.push(user);
         }).leaving(function (user) {
-            _this.usersInRoom = _this.usersInRoom.filter(function (u) {
+            _this2.usersInRoom = _this2.usersInRoom.filter(function (u) {
                 return u != user;
             });
         }).listen('MessagePosted', function (e) {
-            _this.messages.push({
+            _this2.messages.push({
                 message: e.message.message,
                 user: e.user
             });
@@ -2155,7 +2166,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            notificationText: 'Test Notification'
+            notificationText: ''
         };
     },
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Events\MessagePosted;
+use App\Events\Notify;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,40 @@ Route::post('/messages', function() {
 
     // Announce that a new mesage has been posted
     broadcast(new MessagePosted($message, $user))->toOthers();
+
+    return ['status' => 'OK'];
+})->middleware('auth');
+
+Route::get('/notifications', function() {
+    // Get all notifications
+    return App\Notification::with('user')->get();
+})->middleware('auth');
+
+Route::get('/notificationsNow', function() {
+    // Get relevant notifications
+    return App\Notification::with('user')
+                                    ->where('timestamp', '<', time())
+                                    ->where('read', '=', 0)->get();
+})->middleware('auth');
+
+Route::post('/notifications', function() {
+    // Store the new notification
+    $user = Auth::user();
+
+    $message = $user->notifications()->create([
+        'notification' => request()->get('notification')
+    ]);
+
+    return ['status' => 'OK'];
+})->middleware('auth');
+
+Route::post('/notificationRead', function() {
+    // Mark notification as read
+    $user = Auth::user();
+    $message = $user->notifications()
+                                ->where('id', request()
+                                ->get('id'))
+                                ->update(['read' => 1]);
 
     return ['status' => 'OK'];
 })->middleware('auth');

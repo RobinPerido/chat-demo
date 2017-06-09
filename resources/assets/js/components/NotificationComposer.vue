@@ -8,7 +8,7 @@
 export default {
     data () {
         return {
-            notificationText: 'Test Notification'
+            notificationText: ''
         };
     },
     methods: {

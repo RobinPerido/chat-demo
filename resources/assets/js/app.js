@@ -40,9 +40,18 @@ const app = new Vue({
                 // Do whatever;
             })
         },
-        addNotification(notification) {
+        addNotification() {
             // Add to notification view
-            this.notifications.push(notification);
+            // this.notifications.push(notification);
+            axios.get('/notificationsNow').then(response => {
+                for (var i = 0; i < response.data.length; i++) {
+                    // Show notification
+                    this.notifications.push(response.data[i]);
+                    // Mark as read
+                    axios.post('/notificationRead', response.data[i]) // Probably want this as an API request for better performance
+                }
+                // this.notifications.push(response.data);
+            });
         }
     },
     created() {
